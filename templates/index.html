@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Generator</title>
+    <!-- 引入 Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- 引入自定义样式 -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mt-5">Submit Your Prompt</h1>
+        <div class="row justify-content-md-center mt-3">
+            <div class="col-md-6">
+                <form id="promptForm">
+                    <div class="form-group">
+                        <input type="text" name="prompt" class="form-control" placeholder="Enter prompt" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                </form>
+            </div>
+        </div>
+        <div class="row justify-content-md-center mt-3">
+            <div class="col-md-6">
+                <div id="progress" class="progress" style="height: 30px;">
+                    <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                </div>
+                <p id="progressText" class="text-center"></p>
+            </div>
+        </div>
+        <div class="row justify-content-md-center mt-3">
+            <div class="col-md-6">
+                <div id="result" class="text-center"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入 jQuery 和 Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- 引入 Socket.IO -->
+    <script src="https://cdn.socket.io/socket.io-3.1.3.min.js"></script>
+    <!-- 自定义脚本 -->
+    <script>
+        $(document).ready(function() {
+            var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+            $('#promptForm').submit(function(e) {
+                e.preventDefault();
+                socket.emit('submit_prompt', {prompt: $('input[name="prompt"]').val()});
+                $('#promptForm').find('input').val(''); // 清空输入框
+            });
+
+            socket.on('task_status', function(data) {
+                let progress = parseInt(data.progress.replace('%', ''));
+                $('#progressBar').css('width', progress + '%').attr('aria-valuenow', progress);
+                $('#progressText').text('Progress: ' + data.progress);
+                if (data.imageUrl) {
+                    $('#result').html(`<img src="${data.imageUrl}" class="img-fluid" />`);
+                }
+                if (progress >= 100) {
+                    $('#progressBar').removeClass('progress-bar-striped progress-bar-animated'); // 任务完成时停止动画
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+/* 设置全局字体和背景 */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+}
+
+/* 进度条的样式 */
+.progress {
+    height: 30px;
+    margin-top: 20px;
+}
+
+.progress-bar {
+    line-height: 30px;
+    color: #fff;
+}
+
+/* 图片结果的样式 */
+#result img {
+    max-width: 100%; /* 使图片宽度不超过容器宽度 */
+    height: auto; /* 保持图片的原始宽高比 */
+    margin-top: 20px; /* 在图片上方留出一些空间 */
+}
+
+/* 使进度文本更加突出 */
+#progressText {
+    font-weight: bold;
+}
+
+/* 表单控件样式 */
+#promptForm input[type="text"] {
+    margin-bottom: 10px;
+}
