@@ -6,3 +6,6 @@ Midjourney. Flask项目.
 
 
 开发中。。。
+
+
+<img width="832" alt="image" src="https://github.com/sfvsfv/Midjourney/assets/62045791/38418a65-846f-4cc4-93e8-a34598552839">
