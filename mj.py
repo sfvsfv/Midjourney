@@ -2,13 +2,24 @@
 import requests
 import json
 import time
+import openai
+
+# 设置 OpenAI API
+openai.api_base = 'https://api.aigcbest.top/v1'
+openai.api_key = '密钥'
 
 # 公共变量
-secret_key = "自己密钥"
+secret_key = "sk-wWi2UGe20JEuukZGC955863dFaDf47FfA0802559734c4432"
 headers = {
     "Authorization": secret_key,
     "Content-Type": "application/json"
 }
+
+# 系统默认提示词
+system_prompt = ("I want you to translate the following Chinese input into a creative English description "
+                 "suitable for generating an image with the Midjourney AI program. Your job is to provide "
+                 "a detailed and imaginative description that will inspire unique and interesting images "
+                 "from AI. Your reply should be in English and as concise as possible, not exceeding 60 words.")
 
 
 # 下载图片并保存到本地文件
@@ -61,7 +72,6 @@ def fetch_task_details(task_id):
 
 
 # 提交变换任务（用户可选）
-# 提交变换任务（用户可选）
 def submit_change(task_id):
     actions = {"1": "UPSCALE", "2": "VARIATION", "3": "REROLL"}
     action_input = input("Enter the action (1 for UPSCALE, 2 for VARIATION, 3 for REROLL): ")
@@ -91,11 +101,32 @@ def submit_change(task_id):
         return None
 
 
-
 # 主程序流程
 def main():
-    prompt = input("Please enter the prompt for the image: ")
-    task_id = submit_task(prompt)
+    # 获取用户输入并将其作为对话的一部分
+    user_input = input("请输入您心中的图像或想法的描述（中文）: ")
+    messages = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": user_input}
+    ]
+
+    # 向 OpenAI API 发送请求并获取响应
+    try:
+        res = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo-16k-0613",
+            messages=messages,
+            stream=False,
+        )
+        # 打印生成的提示词
+        generated_prompt = res['choices'][0]['message']['content']
+        print("生成的提示词（英文）:", generated_prompt)
+
+    except openai.error.OpenAIError as e:
+        print(f"发生错误: {e}")
+        return
+
+    # 使用生成的提示词提交任务
+    task_id = submit_task(generated_prompt)
     if task_id:
         task_details = fetch_task_details(task_id)
         if task_details:
