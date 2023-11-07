@@ -9,7 +9,7 @@ openai.api_base = 'https://api.aigcbest.top/v1'
 openai.api_key = '密钥'
 
 # 公共变量
-secret_key = "sk-wWi2UGe20JEuukZGC955863dFaDf47FfA0802559734c4432"
+secret_key = "密钥"
 headers = {
     "Authorization": secret_key,
     "Content-Type": "application/json"
