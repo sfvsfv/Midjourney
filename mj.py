@@ -3,6 +3,8 @@ import requests
 import json
 import time
 import openai
+import os
+
 
 # 设置 OpenAI API
 openai.api_base = 'https://api.aigcbest.top/v1'
@@ -22,13 +24,18 @@ system_prompt = ("I want you to translate the following Chinese input into a cre
                  "from AI. Your reply should be in English and as concise as possible, not exceeding 60 words.")
 
 
-# 下载图片并保存到本地文件
+# 下载图片并保存到本地w文件夹image中
 def download_image(image_url, local_file_name):
+    # 创建image文件夹（如果不存在）
+    if not os.path.exists('image'):
+        os.makedirs('image')
+
     response = requests.get(image_url)
     if response.status_code == 200:
-        with open(local_file_name, 'wb') as file:
+        # 修改保存路径为image文件夹下
+        with open(f'image/{local_file_name}', 'wb') as file:
             file.write(response.content)
-        print(f"Image saved as {local_file_name}")
+        print(f"Image saved as image/{local_file_name}")
     else:
         print(f"Error: Unable to download image from {image_url}")
 
