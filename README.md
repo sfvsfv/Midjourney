@@ -23,3 +23,5 @@ mj提示词案例：https://promptheroes.cn/categories/midjourney-prompt/
 
 
 <img width="832" alt="image" src="https://github.com/sfvsfv/Midjourney/assets/62045791/38418a65-846f-4cc4-93e8-a34598552839">
+
+![changed_image_1699523021330474](https://github.com/sfvsfv/Midjourney/assets/62045791/e2c2a23d-9c2b-444e-9548-39056aad954b)
